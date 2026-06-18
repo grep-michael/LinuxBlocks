@@ -3,6 +3,10 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
+	"strings"
 )
 
 func PrintObj(obj any) {
@@ -11,4 +15,35 @@ func PrintObj(obj any) {
 		fmt.Printf("Failed to marshel obj %T\n", obj)
 	}
 	fmt.Println(string(js))
+}
+
+func ReadSymlink(path string) string {
+	ret, err := filepath.EvalSymlinks(path)
+	if err != nil {
+		log.Printf("Failed to read symlink %s\n\t%+v\n", path, err)
+	}
+	return ret
+}
+
+func FindDevices(driverPath string) ([]string, error) {
+	entries, err := os.ReadDir(driverPath)
+	if err != nil {
+		return nil, fmt.Errorf("reading driver path %s: %w", driverPath, err)
+	}
+
+	var devices []string
+	for _, entry := range entries {
+		if entry.Type()&os.ModeSymlink == 0 {
+			continue
+		}
+		resolved, err := filepath.EvalSymlinks(filepath.Join(driverPath, entry.Name()))
+		if err != nil {
+			return nil, fmt.Errorf("resolving symlink for %s: %w", entry.Name(), err)
+		}
+		if strings.HasPrefix(resolved, "/sys/devices/") {
+			devices = append(devices, resolved)
+		}
+	}
+
+	return devices, nil
 }
