@@ -20,6 +20,7 @@ func PrintObj(obj any) {
 func ReadSymlink(path string) string {
 	ret, err := filepath.EvalSymlinks(path)
 	if err != nil {
+		//error handling is for cowards
 		log.Printf("Failed to read symlink %s\n\t%+v\n", path, err)
 	}
 	return ret

@@ -1,20 +1,29 @@
 package types
 
-type BlockDevice struct {
-	Name            string       `json:"Name"`
-	Type            BlockDevType `json:"Type"`
-	Hctl            string       `json:"HCTL"`
-	SYSFSDevicePath string       `json:"DevicePath"`
-	SYSFSDriverPath string       `json:"DriverPath"`
-}
-
-type BlockDevType string
+type BusType string
 
 const (
-	NVMEType    BlockDevType = "NVMe"
-	SASType     BlockDevType = "SAS"
-	SATAType    BlockDevType = "SATA"
-	SCSIType    BlockDevType = "SCSI" //sata, sas, usb, some card readers, all handled by the scsi host, aka the sd driver
-	MMCType     BlockDevType = "MMC"
-	GENERICType BlockDevType = "Generic"
+	BusSCSI BusType = "scsi"
+	BusNVMe BusType = "nvme"
+	BusMMC  BusType = "MMC"
 )
+
+type BlockDevice struct {
+	Name            string //sda, nvme, mmc, sr0, etc
+	DevPath         string // /dev/<name>
+	SysFSBlockPath  string // /sys/block/<name>
+	SysFSDevicePath string // /sys/device/...
+
+	Vendor string
+	Model  string
+	Serial string
+
+	SectorCount uint64 //from device/size
+	SectorSize  int
+	SizeBytes   uint64 // SectorCount * SectorSize
+	Removable   bool
+	Rotational  bool
+
+	Bus     BusType
+	Address BusAddress
+}
