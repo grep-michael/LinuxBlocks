@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 )
 
@@ -47,4 +48,14 @@ func FindDevices(driverPath string) ([]string, error) {
 	}
 
 	return devices, nil
+}
+
+func ReadInt64File(file string) (int64, error) {
+	data, err := os.ReadFile(file)
+	if err != nil {
+		return 0, err
+	}
+
+	s := strings.TrimSpace(string(data))
+	return strconv.ParseInt(s, 10, 64)
 }

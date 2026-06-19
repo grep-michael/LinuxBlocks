@@ -14,16 +14,19 @@ type BlockDevice struct {
 	SysFSBlockPath  string // /sys/block/<name>
 	SysFSDevicePath string // /sys/device/...
 
-	Vendor string
-	Model  string
-	Serial string
+	Vendor string       `sysfs:"device/vendor"`
+	Model  string       `sysfs:"device/model"`
+	Serial SerialNumber `sysfs:"device/serial"`
 
-	SectorCount uint64 //from device/size
-	SectorSize  int
-	SizeBytes   uint64 // SectorCount * SectorSize
-	Removable   bool
-	Rotational  bool
+	BlockCount    int64 `sysfs:"size"`
+	PhysBlockSize int   `sysfs:"queue/physical_block_size"`
+	LogiBlockSize int   `sysfs:"queue/logical_block_size"`
+	SizeBytes     int64 // SectorCount * SectorSize
+	Removable     bool  `sysfs:"removable"`
+	Rotational    bool  `sysfs:"queue/rotational"`
 
 	Bus     BusType
 	Address BusAddress
 }
+
+type SerialNumber string

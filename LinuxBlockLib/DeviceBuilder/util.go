@@ -1,4 +1,4 @@
-package deviceresolver
+package devicebuilder
 
 import (
 	util "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Util"
