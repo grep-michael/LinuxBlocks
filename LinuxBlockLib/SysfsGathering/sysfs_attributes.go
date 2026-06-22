@@ -18,7 +18,7 @@ import (
 */
 
 // populates the types.BlockDevice fields that have a sysfs tag
-func ResolveBlockDeviceSYSFSAttributes(device *types.BlockDevice) error {
+func PopulateSYSFSAttributes(device *types.BlockDevice) error {
 	objValue := reflect.ValueOf(device).Elem()
 	objType := objValue.Type()
 

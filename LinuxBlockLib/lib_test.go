@@ -8,6 +8,7 @@ import (
 	devicebuilder "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/DeviceBuilder"
 	sysfs "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/SysfsGathering"
 	types "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Types"
+	udev "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/UdevGathering"
 	util "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Util"
 )
 
@@ -43,4 +44,10 @@ func TestPpopulateBlockDeviceLoop(t *testing.T) {
 	}
 
 	util.PrintObj(devices)
+}
+
+func TestUdevPopulating(t *testing.T) {
+	obj := &types.UdevData{}
+	udev.PopulateUdevObject("/run/udev/data/b8:0", obj)
+	util.PrintObj(obj)
 }
