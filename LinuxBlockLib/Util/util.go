@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -16,6 +17,16 @@ func PrintObj(obj any) {
 		fmt.Printf("Failed to marshel obj %T\n", obj)
 	}
 	fmt.Println(string(js))
+}
+
+func HasUdev() bool {
+	if _, err := exec.LookPath("udevadm"); err == nil {
+		return true
+	}
+	if fi, err := os.Stat("/run/udev/data"); err == nil && fi.IsDir() {
+		return true
+	}
+	return false
 }
 
 func ReadSymlink(path string) string {

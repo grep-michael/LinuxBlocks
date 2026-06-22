@@ -34,13 +34,11 @@ func TestPpopulateBlockDeviceLoop(t *testing.T) {
 
 	for _, file := range entries {
 		path := util.ReadSymlink(filepath.Join("/sys/block/", file.Name()))
-		dev := &types.BlockDevice{
-			SysFSBlockPath: path,
-		}
-		err := devicebuilder.PopulateBlockDevice(dev)
+		device, err := devicebuilder.BuildNewBlockDevice(path)
 		if err != nil {
+			t.Error(err)
 		}
-		devices = append(devices, dev)
+		devices = append(devices, device)
 	}
 
 	util.PrintObj(devices)

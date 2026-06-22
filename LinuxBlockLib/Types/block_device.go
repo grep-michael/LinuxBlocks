@@ -18,15 +18,15 @@ type BlockDevice struct {
 	Model  string       `sysfs:"device/model"`
 	Serial SerialNumber `sysfs:"device/serial"`
 
-	BlockCount    int64 `sysfs:"size"`
-	PhysBlockSize int   `sysfs:"queue/physical_block_size"`
-	LogiBlockSize int   `sysfs:"queue/logical_block_size"`
-	SizeBytes     int64 // SectorCount * SectorSize
-	Removable     bool  `sysfs:"removable"`
-	Rotational    bool  `sysfs:"queue/rotational"`
+	BlockCount    int64  `sysfs:"size"`
+	PhysBlockSize int    `sysfs:"queue/physical_block_size"`
+	LogiBlockSize int    `sysfs:"queue/logical_block_size"`
+	SizeBytes     int64  // SectorCount * SectorSize
+	Removable     bool   `sysfs:"removable"`
+	Rotational    bool   `sysfs:"queue/rotational"`
+	UDevId        string `sysfs:"dev"`
 
 	Driver  Driver
-	Bus     BusType
 	Address BusAddress
 }
 

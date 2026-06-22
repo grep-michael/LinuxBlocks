@@ -1,6 +1,12 @@
-#lib for getting block devices
+# lib for getting block devices
 
 
 **general plan**
 
-driver -> drives -> compare found drives to /sys/block
+/sys/block/ -> drive list -> BusAddress -> driver type
+
+**Drive types**
+
+* scsi
+* mmc
+* nvme
