@@ -25,6 +25,7 @@ type BlockDevice struct {
 	Removable     bool  `sysfs:"removable"`
 	Rotational    bool  `sysfs:"queue/rotational"`
 
+	Driver  Driver
 	Bus     BusType
 	Address BusAddress
 }

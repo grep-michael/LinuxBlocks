@@ -59,3 +59,9 @@ func ReadInt64File(file string) (int64, error) {
 	s := strings.TrimSpace(string(data))
 	return strconv.ParseInt(s, 10, 64)
 }
+
+func NormalizeSpaces(in string) string {
+	return strings.TrimSpace(
+		strings.ReplaceAll(in, "    ", " "),
+	)
+}
