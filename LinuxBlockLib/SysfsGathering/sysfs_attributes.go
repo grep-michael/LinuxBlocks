@@ -1,4 +1,4 @@
-package devicebuilder
+package sysfs
 
 import (
 	"fmt"

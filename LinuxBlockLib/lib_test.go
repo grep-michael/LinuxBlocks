@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	devicebuilder "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/DeviceBuilder"
+	sysfs "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/SysfsGathering"
 	types "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Types"
 	util "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Util"
 )
@@ -16,7 +17,7 @@ func TestPpopulateBlockDevice(t *testing.T) {
 		SysFSBlockPath: "/sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0/host0/port-0:0/end_device-0:0/target0:0:0/0:0:0:0/block/sda",
 	}
 	//util.PrintObj(dev)
-	err := devicebuilder.PopulateBlockDevice(dev)
+	err := sysfs.PopulateBlockDevice(dev)
 	if err != nil {
 		t.Error(err)
 	}

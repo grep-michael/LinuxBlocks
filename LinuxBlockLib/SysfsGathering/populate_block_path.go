@@ -1,4 +1,4 @@
-package devicebuilder
+package sysfs
 
 import (
 	"fmt"
@@ -9,20 +9,7 @@ import (
 	util "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Util"
 )
 
-func BuildNewBlockDevice(sysfs_block_path string) (*types.BlockDevice, error) {
-	if !isBlockPath(sysfs_block_path) {
-		return nil, fmt.Errorf("%s is not a block path", sysfs_block_path)
-	}
-	device := &types.BlockDevice{
-		SysFSBlockPath: sysfs_block_path,
-	}
-	err := PopulateBlockDevice(device)
-
-	return device, err
-
-}
-
-// Populaates a types.BlockDevice device with as many fields is it can
+// Populates a types.BlockDevice device with as many fields is it can
 func PopulateBlockDevice(device *types.BlockDevice) error {
 
 	device.Name = filepath.Base(device.SysFSBlockPath)
