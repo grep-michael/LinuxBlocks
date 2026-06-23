@@ -63,7 +63,6 @@ func generateUdevMap(udevFile string) (map[string]string, error) {
 		}
 		if key, value, ok := strings.Cut(pair, "="); ok {
 			properties[key] = value
-
 		}
 	}
 	return properties, nil

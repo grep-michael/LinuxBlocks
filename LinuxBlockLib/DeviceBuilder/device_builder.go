@@ -60,6 +60,7 @@ func PopulateBusAddress(device *types.BlockDevice) error {
 	return nil
 }
 
+// build udev object from a udev id
 func NewUdevData(id types.UDevID) (*types.UdevData, error) {
 	if !util.HasUdev() {
 		return nil, fmt.Errorf("No udev data directory")
