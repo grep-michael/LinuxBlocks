@@ -32,7 +32,7 @@ func TestUdevPopulating(t *testing.T) {
 }
 
 func TestUdevBuilder(t *testing.T) {
-	data, err := udev.NewUdevData("b8:0")
+	data, err := devicebuilder.NewUdevData("b8:0")
 	if err != nil {
 		t.Error(err)
 	}

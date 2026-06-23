@@ -3,11 +3,13 @@ package devicebuilder
 import (
 	"errors"
 	"fmt"
+	"os"
 	"path/filepath"
 
 	sysfs "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/SysfsGathering"
 	types "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Types"
 	udev "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/UdevGathering"
+	util "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Util"
 )
 
 func BuildNewBlockDevice(sysfs_block_path string) (*types.BlockDevice, error) {
@@ -25,7 +27,7 @@ func BuildNewBlockDevice(sysfs_block_path string) (*types.BlockDevice, error) {
 	err = PopulateBusAddress(device)
 	errs = append(errs, err)
 
-	udevData, err := udev.NewUdevData(device.UDevId)
+	udevData, err := NewUdevData(device.UDevId)
 	errs = append(errs, err)
 	device.Udev = udevData
 
@@ -56,4 +58,25 @@ func PopulateBusAddress(device *types.BlockDevice) error {
 	}
 	device.Address = busAddy
 	return nil
+}
+
+func NewUdevData(id types.UDevID) (*types.UdevData, error) {
+	if !util.HasUdev() {
+		return nil, fmt.Errorf("No udev data directory")
+	}
+	udevID := string(id)
+	udevPath := filepath.Join("/run/udev/data", udevID)
+	if _, err := os.Stat(udevPath); err != nil {
+		return nil, err
+	}
+
+	udevData := &types.UdevData{}
+	udevData.DevID = udevID
+	udevData.Raw = udev.EncodeUdevFile(udevID)
+
+	if err := udev.PopulateUdevObject(udevPath, udevData); err != nil {
+		return udevData, err
+	}
+
+	return udevData, nil
 }
