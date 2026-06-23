@@ -25,7 +25,28 @@ func TestPpopulateBlockDevice(t *testing.T) {
 	util.PrintObj(dev)
 }
 
-func TestPpopulateBlockDeviceLoop(t *testing.T) {
+func TestUdevPopulating(t *testing.T) {
+	obj := &types.UdevData{}
+	udev.PopulateUdevObject("/run/udev/data/b8:0", obj)
+	util.PrintObj(obj)
+}
+
+func TestUdevBuilder(t *testing.T) {
+	data, err := udev.NewUdevData("b8:0")
+	if err != nil {
+		t.Error(err)
+	}
+	util.PrintObj(data)
+}
+
+func TestBuilder(t *testing.T) {
+	data, err := devicebuilder.BuildNewBlockDevice("/sys/block/sda")
+	if err != nil {
+		t.Error(err)
+	}
+	util.PrintObj(data)
+}
+func TestBuilderLoop(t *testing.T) {
 
 	var devices []*types.BlockDevice
 
@@ -44,10 +65,4 @@ func TestPpopulateBlockDeviceLoop(t *testing.T) {
 	}
 
 	util.PrintObj(devices)
-}
-
-func TestUdevPopulating(t *testing.T) {
-	obj := &types.UdevData{}
-	udev.PopulateUdevObject("/run/udev/data/b8:0", obj)
-	util.PrintObj(obj)
 }

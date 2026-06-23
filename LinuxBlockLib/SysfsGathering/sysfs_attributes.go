@@ -54,6 +54,12 @@ func loadFieldValue(deviceField reflect.Value, path string) (string, error) {
 		}
 
 		return util.NormalizeSpaces(serial), nil
+	case *types.UDevID:
+		value, err := loadTextFile(path)
+		if err != nil {
+			return "", err
+		}
+		return "b" + util.NormalizeSpaces(value), nil
 	default:
 		value, err := loadTextFile(path)
 		if err != nil {

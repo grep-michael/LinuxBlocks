@@ -13,12 +13,16 @@ func PopulateBlockDevice(device *types.BlockDevice) error {
 
 	device.Name = filepath.Base(device.SysFSBlockPath)
 
+	device.DevPath = filepath.Join("/dev/", device.Name)
+
 	err := PopulateSYSFSAttributes(device)
 	if err != nil {
 		return err
 	}
 
 	PopulateSYSFSDevicePath(device)
+
+	device.SizeBytes = device.BlockCount * int64(device.PhysBlockSize)
 
 	return nil
 }

@@ -24,10 +24,12 @@ type BlockDevice struct {
 	SizeBytes     int64  // SectorCount * SectorSize
 	Removable     bool   `sysfs:"removable"`
 	Rotational    bool   `sysfs:"queue/rotational"`
-	UDevId        string `sysfs:"dev"`
+	UDevId        UDevID `sysfs:"dev"`
+
+	Udev *UdevData
 
 	Driver  Driver
 	Address BusAddress
 }
-
+type UDevID string
 type SerialNumber string

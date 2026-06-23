@@ -1,11 +1,13 @@
 package devicebuilder
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 
 	sysfs "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/SysfsGathering"
 	types "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Types"
+	udev "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/UdevGathering"
 )
 
 func BuildNewBlockDevice(sysfs_block_path string) (*types.BlockDevice, error) {
@@ -15,15 +17,31 @@ func BuildNewBlockDevice(sysfs_block_path string) (*types.BlockDevice, error) {
 	device := &types.BlockDevice{
 		SysFSBlockPath: sysfs_block_path,
 	}
+	var errs []error
+
 	err := sysfs.PopulateBlockDevice(device)
+	errs = append(errs, err)
 
 	err = PopulateBusAddress(device)
-	if err != nil {
-		return nil, err
+	errs = append(errs, err)
+
+	udevData, err := udev.NewUdevData(device.UDevId)
+	errs = append(errs, err)
+	device.Udev = udevData
+
+	populateEmptySysfsWithUdev(device)
+
+	return device, errors.Join(errs...)
+
+}
+
+func populateEmptySysfsWithUdev(device *types.BlockDevice) {
+	if device.Serial == "" {
+		device.Serial = types.SerialNumber(device.Udev.SerialShort)
 	}
-
-	return device, err
-
+	if device.Model == "" {
+		device.Model = device.Udev.Model
+	}
 }
 
 // sets the devices bus addres from its /sys/device<....>/<busAddress> path

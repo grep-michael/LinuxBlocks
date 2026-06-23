@@ -1,19 +1,26 @@
 package udev
 
 import (
+	"os"
 	"path/filepath"
 
 	types "github.com/grep-michael/LinuxBlocks/LinuxBlockLib/Types"
 )
 
-func NewUdev(udevID string) (*types.UdevData, error) {
-	filepath.Join()
-}
+func NewUdevData(id types.UDevID) (*types.UdevData, error) {
+	udevID := string(id)
+	udevPath := filepath.Join("/run/udev/data", udevID)
+	if _, err := os.Stat(udevPath); err != nil {
+		return nil, err
+	}
 
-/*
-tmrw todo
-finish this function
-check if udev id is real
-make audev object
-populate it
-*/
+	udevData := &types.UdevData{}
+	udevData.DevID = udevID
+	udevData.Raw = EncodeUdevFile(udevID)
+
+	if err := PopulateUdevObject(udevPath, udevData); err != nil {
+		return udevData, err
+	}
+
+	return udevData, nil
+}
